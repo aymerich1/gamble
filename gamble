@@ -1,0 +1,46 @@
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/streams" element={<StreamsPage />} /> 
+        <Route path="/stream/:id" element={<StreamPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+// StreamsPage.js
+
+function StreamsPage() {
+  const [streams, setStreams] = useState([]);
+
+  useEffect(() => {
+    fetchStreams(); 
+  }, []);
+
+  async function fetchStreams() {
+    const res = await fetch('/api/streams');
+    setStreams(res.json());
+  }
+
+  return (
+    <div>
+      <StreamList streams={streams} />
+    </div>
+  );
+}
+
+// StreamPage.js 
+
+function StreamPage({match}) {
+  const streamId = match.params.id;
+
+  return (
+    <div>
+      <StreamPlayer streamId={streamId} />
+      <ChatRoom streamId={streamId} />
+    </div>
+  );
+}
